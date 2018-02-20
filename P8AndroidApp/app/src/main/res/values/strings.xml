@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">P8AndroidApp</string>
+    <string name="btn_delete">Delete</string>
+    <string name="upload">Upload</string>
+    <string name="no_images_found">No images found</string>
+    <string name="please_select_image_to_delete">Please select an image to delete</string>
+    <string name="please_select_image_to_upload">Please select an image to upload</string>
+    <string name="are_you_sure_to_delete">Are you sure to delete?</string>
 </resources>
