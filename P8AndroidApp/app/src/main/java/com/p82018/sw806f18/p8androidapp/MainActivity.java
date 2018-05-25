@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Base64;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
@@ -20,6 +21,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,9 +83,41 @@ public class MainActivity extends AppCompatActivity {
                 "\n" +
                 "</body>\n" +
                 "</html>";
+        /*String testSite = "<!DOCTYPE html><html><head><title>Barn 0-5 år</title><meta charset='UTF-8' content='width=device-width, initial-scale=1.0'><!-- Latest compiled and minified CSS -->\n" +
+                "<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css\" type=\"text/css\">\n" +
+                "\n" +
+                "<!-- jQuery library -->\n" +
+                "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\" type='text/javascript'></script>\n" +
+                "\n" +
+                "<!-- Popper JS -->\n" +
+                "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" type='text/javascript'></script>\n" +
+                "\n" +
+                "<!-- Latest compiled JavaScript -->\n" +
+                "<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" type='text/javascript'></script></head><body style='background-color:#D0ECE7;'><div class='content' style='padding:1%;'><h2>Barn 0-5 år</h2><br /><h4>Dette spørgeskema vedrører dit barn.</h4><hr /><form action='http://temp.dk'><h4>Barents højde</h4><p>Skriv barnets højde i centimeter:</p><input id='Barents_højde' type='number' class='form-control'><br /><br /><h4>Barnets vægt</h4><p>Skriv barents vægt i gram:</p><input id='Barnets_vægt' type='number' class='form-control'><br /><br /><h4>Barnets helbred</h4><p>Hvor mange gange har din barn været syg inden for de sidste 6 måneder:</p><select id='Barnets_helbred' class='form-control'><option value='0' class='form-control'>0</option><option value='1-5' class='form-control'>1-5</option><option value='6-10' class='form-control'>6-10</option><option value='10+' class='form-control'>10+</option></select><br /><br /><h4>Barnets livret</h4><p>Udfyld kun hvis relevant:</p><input id='Barnets_livret' type='text' class='form-control'><br /><br /></form></div></body></html>";
+        hubView.loadData(testSite, "text/html; charset=UTF-8", null);*/
         //hubView.loadUrl("https://stackoverflow.com/questions/7305089/how-to-load-external-webpage-inside-webview");
-        hubView.loadData(summary, "text/html", null);
-        hubView.getUrl();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                hubView.loadUrl("http://"+input.getText()+":8081/api/participant/login");
+                hubView.getUrl();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+
     }
 
     @Override
@@ -105,11 +139,10 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         webSettings.setAllowFileAccessFromFileURLs(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setSupportZoom(true);
         webSettings.setLightTouchEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setPluginState(WebSettings.PluginState.ON);
+        webSettings.setBuiltInZoomControls(false);
 
         /*Apparently:
         setLoadWithOverviewMode(true) loads the WebView completely zoomed out
